@@ -11,7 +11,7 @@ tempo = 90
 
 c = Sine(freq=261.626, phase=0, mul=0.1)
 f = Sine(freq=349.228, phase=0, mul=0.1)
-g = Sine(freq= 391.995, phase=0, mul=0.1)
+g = Sine(freq=391.995, phase=0, mul=0.1)
 
 # Possible chords in blues sequences
 states = ["C", "F", "G"]
@@ -115,9 +115,22 @@ def generate_comp(chords):
         i += 1
     print("Compositon of " + str(chords) + " chords: " + str(comp))
     print("Probability of chord sequence " + str(prob))
+    return comp
 
-generate_comp(12)
+comp = generate_comp(12)
 
-# s.start()
-# time.sleep(duration)
-# s.stop()
+s.start()
+for note in comp:
+    if note == "C":
+        c.out()
+        time.sleep(1)
+        c.stop()
+    elif note == "F":
+        f.out()
+        time.sleep(1)
+        f.stop()
+    elif note == "G":
+        g.out()
+        time.sleep(1)
+        g.stop()
+s.stop()
