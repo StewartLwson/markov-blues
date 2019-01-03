@@ -1,6 +1,13 @@
 import numpy as np
 import random as rm
 
+from pyo import *
+import time
+
+s = Server().boot()
+
+s.start()
+
 # Possible chords in blues sequences
 states = ["C", "F", "G"]
 
@@ -105,3 +112,5 @@ def generate_comp(chords):
     print("Probability of chord sequence " + str(prob))
 
 generate_comp(12)
+
+s.stop()
