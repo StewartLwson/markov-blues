@@ -6,7 +6,12 @@ import time
 
 s = Server().boot()
 
-s.start()
+duration = 60
+tempo = 90
+
+c = Sine(freq=261.626, phase=0, mul=0.1)
+f = Sine(freq=349.228, phase=0, mul=0.1)
+g = Sine(freq= 391.995, phase=0, mul=0.1)
 
 # Possible chords in blues sequences
 states = ["C", "F", "G"]
@@ -113,4 +118,6 @@ def generate_comp(chords):
 
 generate_comp(12)
 
-s.stop()
+# s.start()
+# time.sleep(duration)
+# s.stop()
