@@ -49,10 +49,10 @@ elif(SOUND == "Piano"):
     offset=[0.15, 0], loop=False, mul=0.4)
 
 # Possible chords in blues sequences
-states = ["C", "F", "G"]
+states = ["1", "4", "5"]
 
 # Example (training) data of various twelves bar pieces
-example = ["C", "C", "C", "C", "F", "F", "C", "C", "G", "F", "C", "C"]
+example = ["1", "1", "1", "1", "4", "4", "1", "1", "5", "4", "1", "1"]
 
 # TODO: Allow training with multidimensional array
 #example = [ ["C", "C", "C", "C", "F", "F", "C", "C", "G", "F", "C", "C"],
@@ -106,11 +106,11 @@ def generate_comp(length, start):
     i = 0
     changes = []
     while i != length:
-        if current == "C":
+        if current == "1":
             changes = transition[0]
-        elif current == "F":
+        elif current == "4":
             changes = transition[1]
-        elif current == "G":
+        elif current == "5":
             changes = transition[2]
         change = np.random.choice(changes, replace=True, p=matrix[0])
         current = change[1]
@@ -119,19 +119,19 @@ def generate_comp(length, start):
     print("Compositon of " + str(length) + " chords: " + str(comp))
     return comp
 
-comp = generate_comp(12, "C")
+comp = generate_comp(12, "1")
 
 s.start()
 for note in comp:
-    if note == "C":
+    if note == "1":
         c.out()
         time.sleep(1)
         c.stop()
-    elif note == "F":
+    elif note == "4":
         f.out()
         time.sleep(1)
         f.stop()
-    elif note == "G":
+    elif note == "5":
         g.out()
         time.sleep(1)
         g.stop()
