@@ -10,14 +10,43 @@ s = Server().boot()
 duration = 60
 tempo = 90
 
+# Lowest pitch value for every note (can be scaled up an octave by multiplying
+# by 2)
+notes = {
+    "c": 16.35,
+    "c#": 17.32,
+    "d": 18.35,
+    "d#": 19.45,
+    "e": 20.60,
+    "f": 21.83,
+    "f#": 23.12,
+    "g": 24.50,
+    "g#": 25.96,
+    "a": 27.50,
+    "a#": 29.14,
+    "b": 30.87
+}
+
+# Repeatedly multiplies pitch value by 2 to reach correct octave band
+# note is the pitch being scaled
+# band is the target octave band
+def to_band(note, band):
+    n = notes[note]
+    for _ in range(band):
+        n = n * 2
+    return n
+
 if(SOUND == "Synth"):
-    c = Sine(freq=[261.626, 391.995], phase=0, mul=0.1)
-    f = Sine(freq=[349.228, 523.25], phase=0, mul=0.1)
-    g = Sine(freq=[391.995, 587.33], phase=0, mul=0.1)
+    c = Sine(freq=[to_band("c", 4), to_band("g", 4)], phase=0, mul=0.1)
+    f = Sine(freq=[to_band("f", 4), to_band("c", 5)], phase=0, mul=0.1)
+    g = Sine(freq=[to_band("g", 5), to_band("d", 5)], phase=0, mul=0.1)
 elif(SOUND == "Piano"):
-    c = SfPlayer(["sound/Piano.mf.C4.aiff", "sound/Piano.mf.G4.aiff"], speed=1, loop=False, mul=0.4)
-    f = SfPlayer(["sound/Piano.mf.F4.aiff", "sound/Piano.mf.C5.aiff"], speed=1, loop=False, mul=0.4)
-    g = SfPlayer(["sound/Piano.mf.G4.aiff", "sound/Piano.mf.D5.aiff"], speed=1, offset=[0.15, 0], loop=False, mul=0.4)
+    c = SfPlayer(["sound/Piano.mf.C4.aiff", "sound/Piano.mf.G4.aiff"], speed=1,
+    loop=False, mul=0.4)
+    f = SfPlayer(["sound/Piano.mf.F4.aiff", "sound/Piano.mf.C5.aiff"], speed=1,
+    loop=False, mul=0.4)
+    g = SfPlayer(["sound/Piano.mf.G4.aiff", "sound/Piano.mf.D5.aiff"], speed=1,
+    offset=[0.15, 0], loop=False, mul=0.4)
 
 # Possible chords in blues sequences
 states = ["C", "F", "G"]
