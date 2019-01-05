@@ -1,7 +1,7 @@
 import numpy as np
 import random as rm
 
-from pyo import *
+from pyo import Server, Sine, SfPlayer
 import time
 
 SOUND = "Synth"
@@ -69,61 +69,28 @@ print("Possible changes:" + str(transition))
 print("Probability of changes:" + str(matrix))
 
 # Generates a sequence of changes using Markov Chain rules
-def generate_comp(chords):
-    current = "C"
-    print("Start: " + current)
+# length is the amount of bars in the composition
+# start is the starting chord for the composition
+def generate_comp(length, start):
+    current = start
     comp = [current]
     i = 0
-    prob = 1
-    while i != chords:
+    changes = []
+    while i != length:
         if current == "C":
-            change = np.random.choice(transition[0], replace=True, p=matrix[0])
-            if change == "CC":
-                prob *= matrix[0][0]
-                comp.append("C")
-                pass
-            elif change == "CF":
-                prob *= matrix[0][1]
-                current = "F"
-                comp.append("F")
-            else:
-                prob *= matrix[0][2]
-                current = "G"
-                comp.append("G")
+            changes = transition[0]
         elif current == "F":
-            change = np.random.choice(transition[1], replace=True, p=matrix[1])
-            if change == "FF":
-                prob *= matrix[1][1]
-                comp.append("F")
-                pass
-            elif change == "FC":
-                prob *= matrix[1][0]
-                current = "C"
-                comp.append("C")
-            else:
-                prob *= matrix[1][2]
-                current = "G"
-                comp.append("G")
+            changes = transition[1]
         elif current == "G":
-            change = np.random.choice(transition[2], replace=True, p=matrix[2])
-            if change == "GG":
-                prob *= matrix[2][2]
-                comp.append("G")
-                pass
-            elif change == "GC":
-                prob *= matrix[2][0]
-                current = "C"
-                comp.append("C")
-            else:
-                prob *= matrix[2][1]
-                current = "F"
-                comp.append("F")
+            changes = transition[2]
+        change = np.random.choice(changes, replace=True, p=matrix[0])
+        current = change[1]
+        comp.append(change[1])
         i += 1
-    print("Compositon of " + str(chords) + " chords: " + str(comp))
-    print("Probability of chord sequence " + str(prob))
+    print("Compositon of " + str(length) + " chords: " + str(comp))
     return comp
 
-comp = generate_comp(12)
+comp = generate_comp(12, "C")
 
 s.start()
 for note in comp:
