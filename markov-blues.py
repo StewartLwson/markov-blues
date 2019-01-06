@@ -75,22 +75,33 @@ transition = gen_changes(states)
 
 # Generates probability matrix for possible changes based off training data
 def gen_probs(chords):
+    # Matrix of transition probabilties (initially all set to 0)
     matrix = [[0,0,0],
               [0,0,0],
               [0,0,0]]
+    # List of all exisiting transitions in input composition
     changes = []
+
+    # Iterates through input composition and adds each transition to the list
     for i in range(len(chords)):
         if i < len(chords) - 1:
             changes.append(chords[i] + chords[i+1])
+
+    # Iterates through transition list and adds to the matrix each time a
+    # corresponding transition exists
     for c in changes:
         for t in range(len(transition)):
             for i in range(len(transition[t])):
                 if c == transition[t][i]:
                     matrix[t][i] += 1
+
+    # Iterates through the matrix and normalizes each row to contain values
+    # corresponding to probability of transition taking place
     for m in range(len(matrix)):
         num = sum(matrix[m])
         for i in range(len(matrix[m])):
             matrix[m][i] = (matrix[m][i] / num)
+
     return matrix
 
 matrix = gen_probs(example)
