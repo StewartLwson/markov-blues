@@ -11,8 +11,7 @@ key = "c"
 duration = 60
 tempo = 90
 
-# Lowest pitch value for every note (can be scaled up an octave by multiplying
-# by 2)
+# Lowest pitch value for every note
 notes = {
     "c": 16.35,
     "c#": 17.32,
@@ -28,14 +27,12 @@ notes = {
     "b": 30.87
 }
 
-# Repeatedly multiplies pitch value by 2 to reach correct octave band
+# Multiplies pitch value by 2 to power of given octave band to transpose to
+# that octave
 # note is the pitch being scaled
 # band is the target octave band
 def to_band(note, band):
-    n = notes[note]
-    for _ in range(band):
-        n = n * 2
-    return n
+    return notes[note] * (2**band)
 
 if(SOUND == "Synth"):
     one_chord = Sine(freq=[to_band("c", 4), to_band("g", 4)], phase=0, mul=0.1)
