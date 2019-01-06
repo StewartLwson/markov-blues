@@ -52,13 +52,10 @@ elif(SOUND == "Piano"):
 states = ["1", "4", "5"]
 
 # Example (training) data of various twelves bar pieces
-example = ["1", "1", "1", "1", "4", "4", "1", "1", "5", "4", "1", "1"]
-
-# TODO: Allow training with multidimensional array
-#example = [ ["1", "1", "1", "1", "4", "4", "1", "1", "5", "4", "1", "1"],
-#            ["1", "1", "4", "1", "4", "4", "1", "1", "5", "4", "1", "1"],
-#            ["1", "1", "1", "1", "4", "4", "1", "1", "5", "5", "1", "1"],
-#            ["1", "1", "4", "1", "4", "4", "1", "1", "5", "5", "1", "1"]]
+example = [["1", "1", "1", "1", "4", "4", "1", "1", "5", "4", "1", "1"],
+           ["1", "1", "4", "1", "4", "4", "1", "1", "5", "4", "1", "1"],
+           ["1", "1", "1", "1", "4", "4", "1", "1", "5", "5", "1", "1"],
+           ["1", "1", "4", "1", "4", "4", "1", "1", "5", "5", "1", "1"]]
 
 # Returns all possible changes for possible chords
 def gen_changes(chords):
@@ -84,8 +81,9 @@ def gen_probs(chords):
 
     # Iterates through input composition and adds each transition to the list
     for i in range(len(chords)):
-        if i < len(chords) - 1:
-            changes.append(chords[i] + chords[i+1])
+        for j in range(len(chords[i])):
+            if j < len(chords[i]) - 1:
+                changes.append(chords[i][j] + chords[i][j+1])
 
     # Iterates through transition list and adds to the matrix each time a
     # corresponding transition exists
