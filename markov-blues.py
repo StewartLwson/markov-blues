@@ -7,6 +7,7 @@ import time
 SOUND = "Synth"
 s = Server().boot()
 
+key = "c"
 duration = 60
 tempo = 90
 
@@ -37,15 +38,17 @@ def to_band(note, band):
     return n
 
 if(SOUND == "Synth"):
-    c = Sine(freq=[to_band("c", 4), to_band("g", 4)], phase=0, mul=0.1)
-    f = Sine(freq=[to_band("f", 4), to_band("c", 5)], phase=0, mul=0.1)
-    g = Sine(freq=[to_band("g", 5), to_band("d", 5)], phase=0, mul=0.1)
+    one_chord = Sine(freq=[to_band("c", 4), to_band("g", 4)], phase=0, mul=0.1)
+    four_chord = Sine(freq=[to_band("f", 4), to_band("c", 5)], phase=0, mul=0.1)
+    five_chord = Sine(freq=[to_band("g", 4), to_band("d", 5)], phase=0, mul=0.1)
 elif(SOUND == "Piano"):
-    c = SfPlayer(["sound/Piano.mf.C4.aiff", "sound/Piano.mf.G4.aiff"], speed=1,
+    path = "sound/Piano.mf."
+    ext = ".aiff"
+    one_chord = SfPlayer([path + "C4" + ext, path + "G4" + ext], speed=1,
     loop=False, mul=0.4)
-    f = SfPlayer(["sound/Piano.mf.F4.aiff", "sound/Piano.mf.C5.aiff"], speed=1,
+    four_chord = SfPlayer([path + "F4" + ext, path + "C5" + ext], speed=1,
     loop=False, mul=0.4)
-    g = SfPlayer(["sound/Piano.mf.G4.aiff", "sound/Piano.mf.D5.aiff"], speed=1,
+    five_chord = SfPlayer([path + "G4" + ext, path + "D5" + ext], speed=1,
     offset=[0.15, 0], loop=False, mul=0.4)
 
 # Possible chords in blues sequences
@@ -55,10 +58,10 @@ states = ["1", "4", "5"]
 example = ["1", "1", "1", "1", "4", "4", "1", "1", "5", "4", "1", "1"]
 
 # TODO: Allow training with multidimensional array
-#example = [ ["C", "C", "C", "C", "F", "F", "C", "C", "G", "F", "C", "C"],
-#            ["C", "C", "F", "C", "F", "F", "C", "C", "G", "F", "C", "C"],
-#            ["C", "C", "C", "C", "F", "F", "C", "C", "G", "G", "C", "C"],
-#            ["C", "C", "F", "C", "F", "F", "C", "C", "G", "G", "C", "C"]]
+#example = [ ["1", "1", "1", "1", "4", "4", "1", "1", "5", "4", "1", "1"],
+#            ["1", "1", "4", "1", "4", "4", "1", "1", "5", "4", "1", "1"],
+#            ["1", "1", "1", "1", "4", "4", "1", "1", "5", "5", "1", "1"],
+#            ["1", "1", "4", "1", "4", "4", "1", "1", "5", "5", "1", "1"]]
 
 # Returns all possible changes for possible chords
 def gen_changes(chords):
@@ -124,15 +127,15 @@ comp = generate_comp(12, "1")
 s.start()
 for note in comp:
     if note == "1":
-        c.out()
+        one_chord.out()
         time.sleep(1)
-        c.stop()
+        one_chord.stop()
     elif note == "4":
-        f.out()
+        four_chord.out()
         time.sleep(1)
-        f.stop()
+        four_chord.stop()
     elif note == "5":
-        g.out()
+        five_chord.out()
         time.sleep(1)
-        g.stop()
+        five_chord.stop()
 s.stop()
