@@ -129,15 +129,13 @@ def generate_comp(length, start):
     current = start
     comp = [current]
     i = 0
-    changes = []
+    row = 0
     while i != length:
-        if current == "1":
-            changes = transition[0]
-        elif current == "4":
-            changes = transition[1]
-        elif current == "5":
-            changes = transition[2]
-        change = np.random.choice(changes, replace=True, p=matrix[0])
+        for chord in chords:
+            if current is chord:
+                row = chords.index(chord)
+        change = np.random.choice(transition[row], replace=True, p=matrix[row])
+        print(change)
         current = change[1]
         comp.append(change[1])
         i += 1
