@@ -12,7 +12,7 @@ duration = 60
 tempo = 90
 
 # Lowest pitch value for every note
-notes = {
+notes_dict = {
     "c": 16.35,
     "c#": 17.32,
     "d": 18.35,
@@ -27,17 +27,33 @@ notes = {
     "b": 30.87
 }
 
-# Multiplies pitch value by 2 to power of given octave band to transpose to
-# that octave
-# note is the pitch being scaled
-# band is the target octave band
-def to_band(note, band):
-    return notes[note] * (2**band)
+# All available notes (whole tone scale)
+all_notes = sorted(notes_dict.keys())
+
+start = all_notes.index(key)
+
+# Shift the the notes list to begin with the key
+for _ in range(start):
+    all_notes.append(all_notes.pop(0))
+
+degrees = [0, 2, 3, 5, 7, 8, 10]
+
+def to_chords(notes, degrees, band):
+    chords = []
+    octave = band
+    for degree in degrees:
+        if degree > notes.index("c") and key is not "c":
+            octave = band + 1
+        note = notes_dict[notes[degree]]
+        chords.append(Sine(freq=[note * (2**octave), note * (2**octave) * (3/2)], phase=0, mul=0.1))
+    return chords
+
+chords = to_chords(all_notes, degrees, 4)
 
 if(SOUND == "Synth"):
-    one_chord = Sine(freq=[to_band("c", 4), to_band("g", 4)], phase=0, mul=0.1)
-    four_chord = Sine(freq=[to_band("f", 4), to_band("c", 5)], phase=0, mul=0.1)
-    five_chord = Sine(freq=[to_band("g", 4), to_band("d", 5)], phase=0, mul=0.1)
+    one_chord = chords[0]
+    four_chord = chords[3]
+    five_chord = chords[4]
 elif(SOUND == "Piano"):
     path = "sound/Piano.mf."
     ext = ".aiff"
